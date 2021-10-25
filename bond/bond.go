@@ -7,6 +7,7 @@ import (
 	"github.com/bqxtt/bond_filter/util"
 	"net/http"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -44,14 +45,23 @@ type Bond struct {
 
 	VolatilityRate float64 // 波动率
 	RatingScore    float64 // 计算排名得分
+	Rank           int
 }
 
 type Bonds []*Bond
 
 func (bonds *Bonds) Print() {
-	for _, b := range *bonds {
-		fmt.Println(fmt.Sprintf("代码：%v 名称：%v 现价：%v 评级：%v 正股波动率：%v 排名得分：%v", b.BondID, b.BondNM, b.Price, b.RatingCD, b.VolatilityRate, b.RatingScore))
+	for i, b := range *bonds {
+		fmt.Println(fmt.Sprintf("排名：%v 代码：%v 名称：%v 现价：%v 评级：%v 正股波动率：%v 剩余年限：%v 排名得分：%v", i, b.BondID, b.BondNM, b.Price, b.RatingCD, b.VolatilityRate, b.YearLeft, b.RatingScore))
 	}
+}
+
+func (bonds *Bonds) ToString() string {
+	var result []string
+	for i, b := range *bonds {
+		result = append(result, fmt.Sprintf("排名：%v 代码：%v 名称：%v 现价：%v 评级：%v 正股波动率：%v 剩余年限：%v 排名得分：%v", i, b.BondID, b.BondNM, b.Price, b.RatingCD, b.VolatilityRate, b.YearLeft, b.RatingScore))
+	}
+	return strings.Join(result, "")
 }
 
 func (bonds *Bonds) FilterRating() *Bonds {
@@ -100,6 +110,9 @@ func (bonds *Bonds) Sort() *Bonds {
 	sort.Slice(*bonds, func(i, j int) bool {
 		return (*bonds)[i].RatingScore > (*bonds)[j].RatingScore
 	})
+	for i, b := range *bonds {
+		b.Rank = i + 1
+	}
 	return bonds
 }
 

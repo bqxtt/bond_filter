@@ -17,9 +17,18 @@ func main() {
 	}
 }
 
+type BondRequest struct {
+	Price float64 `json:"price" form:"price"`
+}
+
 func GetBonds(c *gin.Context) {
+	request := &BondRequest{}
+	var price float64 = 105
+	if err := c.ShouldBindQuery(request); err == nil {
+		price = request.Price
+	}
 	bonds, err := bond.GetBonds(&bond.FilterCondition{
-		ToPrice: 105,
+		ToPrice: price,
 		YtmRt:   0,
 	})
 	if err != nil {
@@ -31,6 +40,5 @@ func GetBonds(c *gin.Context) {
 		FilterRating().
 		FilterRedeem().
 		Sort()
-	c.HTML(http.StatusOK, "bond.html", gin.H{"title": "可转债筛选", "bonds": *filterBonds})
-	//c.JSON(http.StatusOK, filterBonds.ToString())
+	c.HTML(http.StatusOK, "bond.html", gin.H{"title": "bqx的可转债筛选", "price": fmt.Sprint(price), "bonds": *filterBonds})
 }

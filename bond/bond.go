@@ -1,10 +1,10 @@
 package bond
 
 import (
-	"code.byted.org/tcg/bond/stock"
-	"code.byted.org/tcg/bond/util"
 	"encoding/json"
 	"fmt"
+	"github.com/bqxtt/bond_filter/stock"
+	"github.com/bqxtt/bond_filter/util"
 	"net/http"
 	"sort"
 	"time"

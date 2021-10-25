@@ -1,8 +1,8 @@
 package main
 
 import (
-	"code.byted.org/tcg/bond/bond"
 	"fmt"
+	"github.com/bqxtt/bond_filter/bond"
 )
 
 func main() {

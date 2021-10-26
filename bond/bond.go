@@ -95,11 +95,13 @@ func (bonds *Bonds) FilterRedeem() *Bonds {
 }
 
 func (bonds *Bonds) Sort() *Bonds {
+	now := time.Now().Format("20060102")
+	threeYearsAgo := time.Now().AddDate(-3, 0, 0).Format("20060102")
 	for _, b := range *bonds {
 		history, err := stock.GetHistoryPrices(&stock.HistoryCondition{
 			StockCode: b.StockID,
-			StartTime: "20181024",
-			EndTime:   "20211024",
+			StartTime: threeYearsAgo,
+			EndTime:   now,
 		})
 		if err != nil {
 			panic(fmt.Sprintf("sort bonds error: %v", err))
